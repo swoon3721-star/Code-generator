@@ -4,90 +4,162 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Códigos - Bot Discord</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; border-radius: 20px; padding: 30px; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); text-align: center; }
+        .logo { width: 120px; height: 120px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 4px solid #667eea; }
+        .logo img { width: 100%; height: 100%; object-fit: cover; }
+        h1 { color: #333; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+        .code-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin: 20px 0; }
+        #code { font-size: 32px; font-weight: bold; letter-spacing: 3px; font-family: monospace; margin: 10px 0; user-select: all; }
+        .timer { background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; margin: 15px 0; border: 2px solid #ffc107; }
+        .buttons { display: flex; gap: 15px; margin: 20px 0; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .btn-generate { background: #667eea; color: white; }
+        .btn-copy { background: #4CAF50; color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .instructions { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-top: 20px; text-align: left; }
+        footer { margin-top: 20px; color: #888; font-size: 14px; }
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); opacity: 0; transition: all 0.3s ease; }
+        .toast.show { opacity: 1; }
+        @media (max-width: 480px) { .buttons { flex-direction: column; } #code { font-size: 24px; } }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://i.ibb.co/Psj58Y76/uva-logo.jpg" alt="Logo Bot">
+            <img src="https://i.ibb.co/Psj58Y76/uva-logo.jpg" alt="Logo">
         </div>
         
-        <h1><i class="fas fa-robot"></i> Gerador de Códigos</h1>
-        <p class="subtitle">Gere códigos únicos para usar no bot Discord</p>
+        <h1>Gerador de Códigos</h1>
+        <p class="subtitle">Gere códigos para usar no bot Discord</p>
         
-        <div class="main-card">
-            <div class="code-section">
-                <h2><i class="fas fa-key"></i> Código de Acesso</h2>
-                <div class="code-display" id="codeDisplay">
-                    <span class="code-label">SEU CÓDIGO</span>
-                    <div id="currentCode">CLIQUE EM GERAR</div>
-                </div>
-                
-                <div class="timer" id="timer">
-                    <i class="fas fa-clock"></i> Expira em: <span id="countdown">30:00</span>
-                </div>
-            </div>
-            
-            <div class="controls">
-                <button class="btn generate-btn" onclick="generateNewCode()">
-                    <i class="fas fa-bolt"></i> Gerar Novo Código
-                </button>
-                <button class="btn copy-btn" onclick="copyToClipboard()" id="copyBtn">
-                    <i class="far fa-copy"></i> Copiar Código
-                </button>
-            </div>
+        <div class="code-box">
+            <div>SEU CÓDIGO</div>
+            <div id="code">CLIQUE EM GERAR</div>
         </div>
         
-        <div class="history-section">
-            <h3><i class="fas fa-history"></i> Histórico</h3>
-            <div class="history-list" id="historyList">
-                <div class="empty-history">
-                    <i class="fas fa-code"></i>
-                    <p>Nenhum código gerado ainda</p>
-                </div>
-            </div>
-            <button class="btn clear-btn" onclick="clearHistory()">
-                <i class="fas fa-trash"></i> Limpar Histórico
+        <div class="timer">
+            ⏰ Expira em: <span id="countdown">30:00</span>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-generate" onclick="generateCode()">
+                ⚡ Gerar Código
+            </button>
+            <button class="btn btn-copy" onclick="copyCode()" id="copyBtn">
+                📋 Copiar
             </button>
         </div>
         
         <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> Como Usar</h3>
+            <h3>📝 Como Usar:</h3>
             <ol>
-                <li>Clique em <strong>"Gerar Novo Código"</strong></li>
-                <li>Copie o código com <strong>"Copiar Código"</strong></li>
-                <li>No Discord, use: <code>/codigo SEU-CODIGO</code></li>
-                <li>Código vale por <strong>30 minutos</strong></li>
-                <li>Depois use <code>/gerar</code> para criar imagens</li>
+                <li>Clique em "Gerar Código"</li>
+                <li>Copie o código</li>
+                <li>No Discord: <code>/codigo SEU-CODIGO</code></li>
+                <li>Validade: 30 minutos</li>
+                <li>Depois use <code>/gerar</code></li>
             </ol>
         </div>
         
-        <div class="stats">
-            <div class="stat">
-                <i class="fas fa-key"></i>
-                <div>
-                    <h4 id="totalCodes">0</h4>
-                    <p>Códigos Gerados</p>
-                </div>
-            </div>
-            <div class="stat">
-                <i class="fas fa-check-circle"></i>
-                <div>
-                    <h4 id="validCodes">0</h4>
-                    <p>Códigos Válidos</p>
-                </div>
-            </div>
-        </div>
-        
         <footer>
-            <p><i class="fas fa-shield-alt"></i> Sistema Seguro | <i class="fas fa-bolt"></i> Geração Instantânea</p>
-            <p class="copyright">© 2024 Bot Discord</p>
+            <p>© 2024 Bot Discord</p>
         </footer>
     </div>
 
-    <div id="toast" class="toast"></div>
-    
-    <script src="js/script.js"></script>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let currentCode = null;
+        let expirationTime = null;
+        let timer = null;
+
+        function generateCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 8; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCode = code.slice(0, 4) + '-' + code.slice(4);
+            document.getElementById('code').textContent = currentCode;
+            
+            expirationTime = new Date();
+            expirationTime.setMinutes(expirationTime.getMinutes() + 30);
+            
+            startTimer();
+            showToast('✅ Código gerado!');
+            
+            // Salvar no localStorage
+            const history = JSON.parse(localStorage.getItem('codeHistory') || '[]');
+            history.unshift({
+                code: currentCode,
+                time: new Date().toLocaleTimeString(),
+                expires: expirationTime.toISOString()
+            });
+            if (history.length > 10) history.length = 10;
+            localStorage.setItem('codeHistory', JSON.stringify(history));
+        }
+
+        function startTimer() {
+            if (timer) clearInterval(timer);
+            timer = setInterval(updateTimer, 1000);
+            updateTimer();
+        }
+
+        function updateTimer() {
+            if (!expirationTime) return;
+            const now = new Date();
+            const diff = expirationTime - now;
+            
+            if (diff <= 0) {
+                clearInterval(timer);
+                document.getElementById('countdown').textContent = 'EXPIRADO';
+                document.getElementById('code').textContent = 'EXPIRADO';
+                document.querySelector('.timer').style.background = '#f8d7da';
+                document.querySelector('.timer').style.color = '#721c24';
+                return;
+            }
+            
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            document.getElementById('countdown').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function copyCode() {
+            if (!currentCode) {
+                showToast('❌ Gere um código primeiro!');
+                return;
+            }
+            
+            const codeToCopy = currentCode.replace('-', '');
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✅ Copiado!';
+                btn.style.background = '#2196F3';
+                showToast('✅ Código copiado!');
+                
+                setTimeout(() => {
+                    btn.textContent = '📋 Copiar';
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Gerar código inicial
+        window.onload = function() {
+            setTimeout(generateCode, 1000);
+        };
+    </script>
 </body>
 </html>
