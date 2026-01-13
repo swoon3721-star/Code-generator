@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Códigos - Bot Discord</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://i.ibb.co/Psj58Y76/uva-logo.jpg" alt="Logo Bot">
+        </div>
+        
+        <h1><i class="fas fa-robot"></i> Gerador de Códigos</h1>
+        <p class="subtitle">Gere códigos únicos para usar no bot Discord</p>
+        
+        <div class="main-card">
+            <div class="code-section">
+                <h2><i class="fas fa-key"></i> Código de Acesso</h2>
+                <div class="code-display" id="codeDisplay">
+                    <span class="code-label">SEU CÓDIGO</span>
+                    <div id="currentCode">CLIQUE EM GERAR</div>
+                </div>
+                
+                <div class="timer" id="timer">
+                    <i class="fas fa-clock"></i> Expira em: <span id="countdown">30:00</span>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn generate-btn" onclick="generateNewCode()">
+                    <i class="fas fa-bolt"></i> Gerar Novo Código
+                </button>
+                <button class="btn copy-btn" onclick="copyToClipboard()" id="copyBtn">
+                    <i class="far fa-copy"></i> Copiar Código
+                </button>
+            </div>
+        </div>
+        
+        <div class="history-section">
+            <h3><i class="fas fa-history"></i> Histórico</h3>
+            <div class="history-list" id="historyList">
+                <div class="empty-history">
+                    <i class="fas fa-code"></i>
+                    <p>Nenhum código gerado ainda</p>
+                </div>
+            </div>
+            <button class="btn clear-btn" onclick="clearHistory()">
+                <i class="fas fa-trash"></i> Limpar Histórico
+            </button>
+        </div>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Como Usar</h3>
+            <ol>
+                <li>Clique em <strong>"Gerar Novo Código"</strong></li>
+                <li>Copie o código com <strong>"Copiar Código"</strong></li>
+                <li>No Discord, use: <code>/codigo SEU-CODIGO</code></li>
+                <li>Código vale por <strong>30 minutos</strong></li>
+                <li>Depois use <code>/gerar</code> para criar imagens</li>
+            </ol>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <i class="fas fa-key"></i>
+                <div>
+                    <h4 id="totalCodes">0</h4>
+                    <p>Códigos Gerados</p>
+                </div>
+            </div>
+            <div class="stat">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <h4 id="validCodes">0</h4>
+                    <p>Códigos Válidos</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p><i class="fas fa-shield-alt"></i> Sistema Seguro | <i class="fas fa-bolt"></i> Geração Instantânea</p>
+            <p class="copyright">© 2024 Bot Discord</p>
+        </footer>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>
